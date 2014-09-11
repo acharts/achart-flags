@@ -20,13 +20,17 @@ Flag.ATTRS = {
    * 显示的文本
    * @type {String}
    */
-  text : '',
-
+  title : '',
   /**
    * 显示的文本配置信息
    * @type {Object}
    */
-  textAttr: null,
+  titleCfg: null,
+  /**
+   * tooltip显示的文本
+   * @type {String}
+   */
+  text: '',
   /**
    * 连接线的配置信息
    * @type {Object}
@@ -41,10 +45,9 @@ Flag.ATTRS = {
    * 图形的配置信息
    * @type {Object}
    */
-  shapeAttr : {
+  shapeCfg: {
     
   },
-
   /**
    * 类型
    * @type {String}
@@ -77,7 +80,7 @@ Util.augment(Flag,{
         var _self = this;
         _self._drawLine();
         _self._drawShape();
-        _self._drawText();
+        _self._drawTitle();
     },
     //画线
     _drawLine: function(){
@@ -101,8 +104,12 @@ Util.augment(Flag,{
             x1: x,
             y1: y,
             x2: x,
-            y2: y - distance
+            y2: distance + y
         });
+
+        distance <= 0 ?
+             _self.set('bottomY', y)
+            :_self.set('topY', y)
 
         return cfg;
     },
@@ -121,7 +128,7 @@ Util.augment(Flag,{
             x = point.x,
             y = point.y,
             type = _self.get('shapeType'),
-            shape = _self.get('shapeAttr'),
+            shape = _self.get('shapeCfg'),
             distance = _self.get('distance'),
             cfg;
 
@@ -133,27 +140,36 @@ Util.augment(Flag,{
                 cfg = Util.mix(shape,{
                     //矩形
                     x : x - width/2,
-                    y : distance > 0 ? y  : (y  - height),
+                    y : distance > 0 ? y + distance  : (y  - height + distance),
                     width : width,
                     height: height
                 });
+                distance <= 0 ?
+                    _self.set('topY', cfg.y)
+                    :_self.set('bottomY', cfg.y + height)
                 break;
             case 'image':
                 cfg = Util.mix(shape,{
                     //图形
                     x : x - width/2,
-                    y : distance > 0 ? (y)  : (y - distance - height),
+                    y : distance > 0 ? (y + distance)  : (y + distance - height),
                     width : width,
                     height: height
                 });
+                distance <= 0 ?
+                    _self.set('topY', cfg.y)
+                    :_self.set('bottomY', cfg.y + height)
                 break;
             default :
                 type = 'circle';
                 cfg = Util.mix(shape,{
                     //圆形
                     cx: x,
-                    cy: distance > 0 ? (y + shape.r) : (y - shape.r)
+                    cy: distance > 0 ? (y + shape.r + distance) : (y - shape.r + distance)
                 });
+                distance <= 0 ?
+                    _self.set('topY', cfg.cy - shape.r)
+                    :_self.set('bottomY', cfg.cy + shape.r)
                 break;
         }
         return {
@@ -162,43 +178,49 @@ Util.augment(Flag,{
         };
     },
     //添加文字
-    _drawText: function(){
+    _drawTitle: function(){
         var _self = this,
             cash = _self.get('cash');
 
-        var cfg = _self.__getTextAttr();
+        var cfg = _self.__getTitleAttr();
         if(cfg){
-            var text = _self.addShape('text', _self.__getTextAttr());
-            cash.text = text;
+            var title = _self.addShape('text', _self.__getTitleAttr());
+            cash.title = title;
         }
     },
     //获取文字配置
-    __getTextAttr: function(){
+    __getTitleAttr: function(){
         var _self = this,
-            text = _self.get('text'),
-            textAttr = _self.get('textAttr'),
+            title = _self.get('title'),
+            shape = _self.get('shapeCfg'),
+            titleCfg = _self.get('titleCfg'),
             point = _self.get('point'),
             x = point.x,
             y = point.y,
             distance = _self.get('distance');
 
-        if(!text) return;
+        var width = shape.width || 24,
+            height = shape.height || 24;
 
-        var cfg = Util.mix(textAttr,{
-            text: text,
+        if(!title) return;
+
+        var cfg = Util.mix(titleCfg,{
+            text: title,
             x : x ,
-            y : distance > 0 ? (y + distance)  : (y + distance - 8)
+            y : distance > 0 ? (y + distance + height/2)  : (y + distance - height/2)
         });
 
         return cfg;
     },
     //删除
-    remove: function(){
+    removeFlag: function(){
         var _self = this,
             cash = _self.get('cash');
         cash.line && cash.line.remove();
         cash.shape && cash.shape.remove();
-        cash.text && cash.text.remove();
+        cash.title && cash.title.remove();
+
+        _self.remove();
     },
     /**
      * 修改flag配置，会触发重绘
@@ -217,14 +239,16 @@ Util.augment(Flag,{
         var _self = this,
             cash = _self.get('cash');
 
-        _self.remove();
+        cash.line && cash.line.remove();
+        cash.shape && cash.shape.remove();
+        cash.title && cash.title.remove();
 
         //重绘线
         _self._drawLine();
         //重绘shape
         _self._drawShape();
         //重绘图形
-        _self._drawText();
+        _self._drawTitle();
     }
 });
 

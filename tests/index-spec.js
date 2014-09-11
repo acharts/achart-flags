@@ -24,11 +24,11 @@ describe('achart-flag',function(){
             'stroke-width': 1
         },
         shapeType: 'rect',
-        shapeAttr: {
+        shapeCfg: {
             stock: '#ccc'
         },
-        text: 'A',
-        textAttr: {
+        title: 'A',
+        titleCfg: {
             x : 150,
             y : 100,
             rotate : 90,
@@ -45,16 +45,18 @@ describe('achart-flag',function(){
 
     it('修改配置重新生成',function(){
         var item = {
-                x : 20,
-                y: 40,
+                point: {
+                    x: 20,
+                    y: 40
+                },
                 distance: 0,
                 line: {
                     'stroke': '#000000',
                     'stroke-width': 0
                 },
-                text: '',
+                title: '',
                 shapeType: 'image',
-                shapeAttr: {
+                shapeCfg: {
                     width: 16,
                     height: 20,
                     src: 'https://i.alipayobjects.com/i/ecmng/png/201408/3Ds9p7HMph_src.png'
@@ -69,19 +71,21 @@ describe('achart-flags', function() {
       var flags = canvas.addGroup(Flags,{
           items : [
               {
-                  x: 10,
-                  y: 20,
+                  point: {
+                      x: 10,
+                      y: 20
+                  },
                   distance: -5,
                   line: {
                       'stroke': '#000000',
                       'stroke-width': 1
                   },
                   shapeType: 'rect',
-                  shapeAttr: {
+                  shapeCfg: {
                       stock: '#ccc'
                   },
-                  text: 'A',
-                  textAttr: {
+                  title: 'A',
+                  titleCfg: {
                       x : 150,
                       y : 100,
                       rotate : 90,
@@ -92,34 +96,38 @@ describe('achart-flags', function() {
 
               },
               {
-                  x : 20,
-                  y: 40,
+                  point: {
+                      x: 20,
+                      y: 40
+                  },
                   distance: 0,
                   line: {
                       'stroke': '#000000',
                       'stroke-width': 0
                   },
                   shapeType: 'image',
-                  shapeAttr: {
+                  shapeCfg: {
                       width: 16,
                       height: 20,
                       src: 'https://i.alipayobjects.com/i/ecmng/png/201408/3Ds9p7HMph_src.png'
                   }
               },
               {
-                  x : 30,
-                  y:  80,
+                  point: {
+                      x: 30,
+                      y: 80
+                  },
                   distance: -5,
                   line: {
                       'stroke': '#000000',
                       'stroke-width': 1
                   },
-                  shapeAttr:{
+                  shapeCfg:{
                       stock: '#ccc',
                       r: 12
                   },
-                  text: 'B',
-                  textAttr: {
+                  title: 'B',
+                  titleCfg: {
                       x : 150,
                       y : 100,
                       rotate : 90,
@@ -137,19 +145,21 @@ describe('achart-flags', function() {
     it('重新配置', function() {
         var items = [
                 {
-                    x: 120,
-                    y: 20,
+                    point: {
+                        x: 120,
+                        y: 20
+                    },
                     distance: 15,
                     line: {
                         'stroke': '#000000',
                         'stroke-width': 1
                     },
                     shapeType: 'rect',
-                    shapeAttr: {
+                    shapeCfg: {
                         stock: '#ccc'
                     },
-                    text: 'v',
-                    textAttr: {
+                    title: 'v',
+                    titleCfg: {
                         x : 150,
                         y : 100,
                         rotate : 90,
@@ -160,19 +170,45 @@ describe('achart-flags', function() {
 
                 },
                 {
-                    x : 130,
-                    y:  80,
-                    distance: -5,
+                    point: {
+                        x: 130,
+                        y: 80
+                    },
+                    distance: -15,
                     line: {
                         'stroke': '#000000',
                         'stroke-width': 1
                     },
-                    shapeAttr:{
+                    shapeCfg:{
                         stock: '#ccc',
                         r: 12
                     },
-                    text: 'g',
-                    textAttr: {
+                    title: 'g',
+                    titleCfg: {
+                        x : 150,
+                        y : 100,
+                        rotate : 90,
+                        fill : 'blue',
+                        'font-size':16,
+                        'font-weight' : 'bold'
+                    }
+                },
+                {
+                    point: {
+                        x: 130,
+                        y: 80
+                    },
+                    distance: -15,
+                    line: {
+                        'stroke': '#000000',
+                        'stroke-width': 1
+                    },
+                    shapeCfg:{
+                        stock: '#ccc',
+                        r: 12
+                    },
+                    title: 'GG',
+                    titleCfg: {
                         x : 150,
                         y : 100,
                         rotate : 90,
@@ -185,6 +221,29 @@ describe('achart-flags', function() {
 
         flags.change(items);
 
-        expect(flags.get('flagGroups').length).to.be(2);
+        expect(flags.get('flagGroups').length).to.be(3);
     });
+
+    it('添加一个flag', function() {
+        var add = {
+            point: {
+                x: 120,
+                y: 140
+            },
+            distance: 0,
+            line: {
+                'stroke': '#000000',
+                'stroke-width': 0
+            },
+            shapeType: 'image',
+            shapeCfg: {
+                width: 16,
+                height: 20,
+                src: 'https://i.alipayobjects.com/i/ecmng/png/201408/3Ds9p7HMph_src.png'
+            }
+        }
+
+        flags.addFlag(add);
+        expect(flags.get('flagGroups').length).to.be(4);
+    })
 });

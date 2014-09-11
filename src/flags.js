@@ -35,7 +35,7 @@ Flags.ATTRS = {
     /**
      * @private
      */
-    xCache : null
+    flagGroups : null
 };
 
 Util.augment(Flags,{
@@ -44,6 +44,15 @@ Util.augment(Flags,{
         var _self = this;
         Flags.superclass.renderUI.call(_self);
         _self._drawFlags();
+    },
+    bindUI :function(){
+        var _self =this;
+        _self.on('click',function(ev){
+            var flag = _self.findBy(function(item){
+                return item.containsElement && item.containsElement(ev.target)
+            });
+            _self.fire('flagclick',{flag : flag});
+        });
     },
     //画flag
     _drawFlags: function(){
@@ -58,25 +67,45 @@ Util.augment(Flags,{
         _self.set('flagGroups',flagGroups);
     },
     /**
-     * 添加flag
-     * @param {Object} item marker的配置信息
+     * 添加单个flag
+     * @param {Object} item marker`的配置信息
      */
     addFlag: function(item){
-        return this._addFlag(item);
+        var _self = this,
+            flagGroups = _self.get('flagGroups'),
+            items = _self.get('items');
+
+        if(!items) items = [];
+
+        items.push(item);
+        var flag = this._addFlag(item);
+
+        flagGroups.push(flag)
+        return flag;
     },
     //添加flag
     _addFlag: function(item){
         var _self = this,
             flag = _self.get('flag'),
-            cfg = Util.mix({},flag,item);
+            items = _self.get('items');
 
-        if(!cfg.point){
-            cfg.point = {
-                x: cfg.x,
-                y: cfg.y
-            }
-        }
+        var cfg = Util.mix({},flag,item);
         return _self.addGroup(Flag,cfg);
+    },
+    /**
+     * 删除所有flag
+     *
+     */
+    removeAll: function(){
+        var _self = this,
+            flagGroups = _self.get('flagGroups');
+
+        Util.each(flagGroups,function(item,index){
+            item.removeFlag();
+        });
+
+        _self.set('flagGroups',[]);
+        _self.set('items',[]);
     },
     /**
      * 修改flag
@@ -86,10 +115,7 @@ Util.augment(Flags,{
         var _self = this,
             flagGroups = _self.get('flagGroups');
 
-        Util.each(flagGroups,function(item,index){
-            item.remove();
-        });
-        _self.set('flagGroups',[]);
+        _self.removeAll();
         _self.set('items',items);
         _self._drawFlags();
     }

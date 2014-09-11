@@ -16,6 +16,9 @@
   "spm": {
     "main": "index.js",
     "dependencies": {
+        "achart-util" : "1.0.0",
+        "achart-actived" : "1.0.0",
+        "achart-plot" : "1.0.0"
     },
     "devDependencies": {
       "expect.js": "0.3.1"

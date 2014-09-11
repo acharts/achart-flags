@@ -1,6 +1,7 @@
 var expect = require('expect.js');
 var Flags = require('../src/flags'),
     Flag = require('../src/flag'),
+    simulate = require('event-simulate'),
     Canvas = require('achart-canvas'),
     Util = require('achart-util');
 
@@ -69,6 +70,11 @@ describe('achart-flag',function(){
 describe('achart-flags', function() {
 
       var flags = canvas.addGroup(Flags,{
+          events: {
+              flagclick: function(ev){
+                var d = ev;
+              }
+          },
           items : [
               {
                   point: {
@@ -245,5 +251,9 @@ describe('achart-flags', function() {
 
         flags.addFlag(add);
         expect(flags.get('flagGroups').length).to.be(4);
+    })
+
+    it('click',function(){
+        simulate.simulate(flags.getFirst().getFirst().get('node'),'click');
     })
 });

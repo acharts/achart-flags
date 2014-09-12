@@ -16,7 +16,7 @@ seajs.use(['index','achart-canvas'], function(Flags,Canvas) {
     var canvas = new Canvas({
         id : 'f2',
         width : 500,
-        height : 200    
+        height : 200
       });
 
     var flags = canvas.addGroup(Flags,{

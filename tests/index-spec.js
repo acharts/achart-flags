@@ -2,6 +2,7 @@ var expect = require('expect.js');
 var Flags = require('../src/flags'),
     Flag = require('../src/flag'),
     simulate = require('event-simulate'),
+    sinon = require('sinon'),
     Canvas = require('achart-canvas'),
     Util = require('achart-util');
 
@@ -254,6 +255,23 @@ describe('achart-flags', function() {
     })
 
     it('click',function(){
+        var callback = sinon.spy();
+        flags.on('flagclick',callback);
         simulate.simulate(flags.getFirst().getFirst().get('node'),'click');
+        expect(callback.called).to.be(true);
+    })
+
+    it('mouseover',function(){
+        var callback = sinon.spy();
+        flags.on('flagover',callback);
+        simulate.simulate(flags.getFirst().getFirst().get('node'),'mouseover');
+        expect(callback.called).to.be(true);
+    })
+
+    it('mouseout',function(){
+        var callback = sinon.spy();
+        flags.on('flagout',callback);
+        simulate.simulate(flags.getFirst().getFirst().get('node'),'mouseout');
+        expect(callback.called).to.be(true);
     })
 });

@@ -54,6 +54,20 @@ Util.augment(Flags,{
             });
             _self.fire('flagclick',{flag : flag});
         });
+
+        _self.on('mouseover',function(ev){
+            var flag = _self.findBy(function(item){
+                return item.containsElement && item.containsElement(ev.target)
+            });
+            _self.fire('flagover',{flag : flag});
+        });
+
+        _self.on('mouseout',function(ev){
+            var flag = _self.findBy(function(item){
+                return item.containsElement && item.containsElement(ev.target)
+            });
+            _self.fire('flagout',{flag : flag});
+        })
     },
     //画flag
     _drawFlags: function(){

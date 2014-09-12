@@ -10,16 +10,11 @@
 
   * flag的类型和配置
   * 使用flags管理flag
-  * marker 事件
+  * flag 事件
 
 ### flag 的类型
 
   * flag 是Canvas.Group.Flag类，通过 shapeType来标示类型,通过shapeCfg配置图形相关属性,以及一些别的配置信息。
-
-    * circle 圆形
-    * rect 矩形
-    * image 图片
-
 
 ````html
 
@@ -129,8 +124,14 @@ seajs.use(['index','achart-canvas'], function(Flags,Canvas) {
     var flags = canvas.addGroup(Flags,{
         events: {
           flagclick: function(ev){
-            console.log(ev);
-          }
+              console.log(ev.flag);
+          },
+          flagover: function(ev){
+              console.log(ev.flag.get('title'));
+          },
+          flagout: function(ev){
+              console.log(ev.flag.get('shapeType'));
+          },
         },
         items : [
           {
@@ -145,7 +146,8 @@ seajs.use(['index','achart-canvas'], function(Flags,Canvas) {
               },
               shapeType: 'rect',
               shapeCfg: {
-                  stock: '#ccc'
+                  stock: '#ccc',
+                  fill: '#fff'
               },
               title: 'A',
               titleCfg: {

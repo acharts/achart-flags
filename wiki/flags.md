@@ -209,4 +209,6 @@ seajs.use(['index','achart-canvas'], function(Flags,Canvas) {
 
 ### flag 事件
 
-* flags提供了 flagclick 事件，通过ev获取到flag对象
+* flags提供了 flagclick 事件，鼠标点击触发，通过ev.flag获取到flag对象
+* flags提供了 flagover 事件，鼠标移入触发，通过ev.flag获取到flag对象
+* flags提供了 flagout 事件，鼠标移出触发，通过ev.flag获取到flag对象

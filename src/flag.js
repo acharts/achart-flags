@@ -7,7 +7,7 @@ var Util = require('achart-util'),
   Item = require('achart-plot').Item;
 
 /**
- * @class Chart.Flags.Flag
+ * @class Chart.Group.Flag
  * 图形标记，包含文本和连接线
  */
 var Flag = function (cfg) {

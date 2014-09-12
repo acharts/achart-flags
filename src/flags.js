@@ -9,7 +9,7 @@ var Util = require('achart-util'),
     PlotItem = require('achart-plot').Item;
 
 /**
- * @class Chart.Flags
+ * @class Chart.Group.Flags
  * 图形标记，包含文本和连接线
  * @extends Chart.PlotItem
  */
@@ -29,7 +29,8 @@ Flags.ATTRS = {
      */
     flag : null,
     /**
-     * @private
+     *  初始的flag集合配置信息
+     *  @type {Array}
      */
     items : null,
     /**

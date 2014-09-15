@@ -90,7 +90,10 @@ Util.augment(Flags,{
             flagGroups = _self.get('flagGroups'),
             items = _self.get('items');
 
-        if(!items) items = [];
+        if(!items) {
+            items = [];
+            _self.set('items',items);
+        }
 
         items.push(item);
         var flag = this._addFlag(item);
@@ -122,17 +125,80 @@ Util.augment(Flags,{
         _self.set('flagGroups',[]);
         _self.set('items',[]);
     },
+    //根据索引删除flag
+    removeByIndex: function(index){
+        var _self = this,
+            flagGroups = _self.get('flagGroups'),
+            items = _self.get('items');
+
+        var flag = flagGroups[index];
+
+        if(flag){
+            flag.remove();
+            flagGroups.splice(index,1);
+            items.splice(index,1);
+        }
+    },
     /**
      * 修改flag
      * @param {Array} items 新的配置信息
+     * @param {Boolen} animate 进行动画
      */
-    change: function(items){
+    change: function(items,animate){
         var _self = this,
+            selfItems = _self.get('items'),
             flagGroups = _self.get('flagGroups');
 
-        _self.removeAll();
-        _self.set('items',items);
-        _self._drawFlags();
+        if(animate){
+            var eachItem = items.length > flagGroups.length ? items : flagGroups;
+            var delIndexs = [];
+            Util.each(eachItem,function(model,index){
+                var flag = flagGroups[index],
+                    selfItem = selfItems[index],
+                    item = items[index];
+
+                //flag && flag.show();
+                //传入的比原先多
+                if(items.length > flagGroups.length && !flag){
+                    flag = _self.addFlag(item);
+                }else if(items.length < flagGroups.length && !item) {
+                    delIndexs.push(index);
+                }else {
+                    var point = flag.get('point'),
+                        originX = point.x,
+                        originY = point.y,
+                        currX = item.point.x,
+                        currY = item.point.y;
+
+                    flag.animate({x: currX - originX,y: currY - originY},400,function(){
+                        flag.animate({x: 0,y: 0});
+                        flag.change(item);
+                    });
+                    selfItem = item;
+                }
+            });
+
+            Util.each(delIndexs,function(item,index){
+                _self.removeByIndex(index);
+            })
+        }else{
+            _self.removeAll();
+            _self.set('items',items);
+            _self._drawFlags();
+        }
+    },
+    //为了堆叠，根据配置获取topY和bottomY
+    changeStackCfg: function(index,point){
+        var _self = this,
+            flag = _self.get('flag'),
+            flagGroups = _self.get('flagGroups'),
+            items = _self.get('items');
+
+        var cfg = Util.mix({},flag,point);
+
+        if(flagGroups[index]){
+            flagGroups[index].changeStackCfg(cfg);
+        }
     }
 });
 

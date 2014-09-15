@@ -226,7 +226,7 @@ Util.augment(Flag,{
      * 修改flag配置，会触发重绘
      * @param {Object} item 新的配置信息
      */
-    changeCfg: function(item){
+    change: function(item){
         var _self = this;
         Util.mix(_self._attrs,item);
 
@@ -249,6 +249,50 @@ Util.augment(Flag,{
         _self._drawShape();
         //重绘图形
         _self._drawTitle();
+    },
+    //为了堆叠，根据配置获取topY和bottomY
+    changeStackCfg: function(item){
+        var _self = this,
+            point = item.point,
+            y = point.y,
+            distance = item.distance,
+            shape = item.shapeCfg,
+            type = item.shapeType,
+            cfg;
+
+        distance <= 0 ?
+            _self.set('bottomY', y)
+            :_self.set('topY', y);
+
+        var height = shape.height || 24;
+
+        switch (type){
+            case 'rect':
+                cfg = Util.mix(shape,{
+                    y : distance > 0 ? y + distance  : (y  - height + distance),
+                });
+                distance <= 0 ?
+                    _self.set('topY', cfg.y)
+                    :_self.set('bottomY', cfg.y + height)
+                break;
+            case 'image':
+                cfg = Util.mix(shape,{
+                    y : distance > 0 ? (y + distance)  : (y + distance - height)
+                });
+                distance <= 0 ?
+                    _self.set('topY', cfg.y)
+                    :_self.set('bottomY', cfg.y + height)
+                break;
+            default :
+                type = 'circle';
+                cfg = Util.mix(shape,{
+                    cy: distance > 0 ? (y + shape.r + distance) : (y - shape.r + distance)
+                });
+                distance <= 0 ?
+                    _self.set('topY', cfg.cy - shape.r)
+                    :_self.set('bottomY', cfg.cy + shape.r)
+                break;
+        }
     }
 });
 

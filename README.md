@@ -35,7 +35,7 @@ flag的管理控件。
 
   * addFlag(item) 添加flag
   * removeAll() 删除所有flag
-  * change(items) 更改所有的flag
+  * change(items,animate) 更改所有的flag
 
 ### 事件
 
@@ -72,7 +72,7 @@ flag的管理控件。
 
 ### 方法
 
-  * changeCfg(cfg) 修改flag配置，会触发重绘
+  * change(cfg) 修改flag配置，会触发重绘
   * repaint() 重绘
 
 ### 更多

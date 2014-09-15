@@ -65,7 +65,7 @@ describe('achart-flag',function(){
                 }
             }
 
-        flag.changeCfg(item);
+        flag.change(item);
     });
 })
 describe('achart-flags', function() {
@@ -149,12 +149,12 @@ describe('achart-flags', function() {
         expect(flags.get('flagGroups').length).to.be(3);
     });
 
-    it('重新配置', function() {
+    it('重新配置 animate', function() {
         var items = [
                 {
                     point: {
-                        x: 120,
-                        y: 20
+                        x: 220,
+                        y: 220
                     },
                     distance: 15,
                     line: {
@@ -178,8 +178,8 @@ describe('achart-flags', function() {
                 },
                 {
                     point: {
-                        x: 130,
-                        y: 80
+                        x: 230,
+                        y: 180
                     },
                     distance: -15,
                     line: {
@@ -190,10 +190,11 @@ describe('achart-flags', function() {
                         stock: '#ccc',
                         r: 12
                     },
+                    shapeType:"circle",
                     title: 'g',
                     titleCfg: {
-                        x : 150,
-                        y : 100,
+                        x : 250,
+                        y : 200,
                         rotate : 90,
                         fill : 'blue',
                         'font-size':16,
@@ -223,13 +224,118 @@ describe('achart-flags', function() {
                         'font-size':16,
                         'font-weight' : 'bold'
                     }
+                },
+                {
+                    point: {
+                        x: 60,
+                        y: 180
+                    },
+                    distance: -15,
+                    line: {
+                        'stroke': '#000000',
+                        'stroke-width': 1
+                    },
+                    shapeCfg:{
+                        stock: '#ccc',
+                        r: 12
+                    },
+                    title: 'cc',
+                    titleCfg: {
+                        x : 150,
+                        y : 100,
+                        rotate : 90,
+                        fill : 'blue',
+                        'font-size':16,
+                        'font-weight' : 'bold'
+                    }
                 }
             ]
 
-        flags.change(items);
+        flags.change(items,true);
+
+        expect(flags.get('flagGroups').length).to.be(4);
+
+        var newItem = items.slice(0,3);
+        flags.change(newItem,true);
 
         expect(flags.get('flagGroups').length).to.be(3);
+
+        var newItem1 = items.slice(0,2);
+        flags.change(newItem1);
+
+        expect(flags.get('flagGroups').length).to.be(2);
     });
+
+    it('堆叠重新计算',function(){
+        flags.changeStackCfg(0,{
+            point: {
+                x: 0,
+                y: 0
+            },
+            distance: -15,
+            line: {
+                'stroke': '#000000',
+                'stroke-width': 1
+            },
+            shapeCfg:{
+                stock: '#ccc',
+                r: 12
+            },
+            title: 'cc',
+            titleCfg: {
+                x : 150,
+                y : 100,
+                rotate : 90,
+                fill : 'blue',
+                'font-size':16,
+                'font-weight' : 'bold'
+            }
+        });
+        expect(flags.get('flagGroups')[0].get('bottomY')).to.be(0);
+        flags.changeStackCfg(0,{
+            point: {
+                x: 220,
+                y: 220
+            },
+            distance: -15,
+            line: {
+                'stroke': '#000000',
+                'stroke-width': 1
+            },
+            shapeType: 'rect',
+            shapeCfg: {
+                stock: '#ccc'
+            },
+            title: 'v',
+            titleCfg: {
+                x : 150,
+                y : 100,
+                rotate : 90,
+                fill : 'blue',
+                'font-size':16,
+                'font-weight' : 'bold'
+            }
+        });
+        expect(flags.get('flagGroups')[0].get('bottomY')).to.be(220);
+        flags.changeStackCfg(0,{
+            point: {
+                x: 20,
+                y: 40
+            },
+            distance: 0,
+            line: {
+                'stroke': '#000000',
+                'stroke-width': 0
+            },
+            shapeType: 'image',
+            shapeCfg: {
+                width: 16,
+                height: 20,
+                src: 'https://i.alipayobjects.com/i/ecmng/png/201408/3Ds9p7HMph_src.png'
+            }
+        });
+        expect(flags.get('flagGroups')[0].get('bottomY')).to.be(40);
+    })
 
     it('添加一个flag', function() {
         var add = {
@@ -251,7 +357,7 @@ describe('achart-flags', function() {
         }
 
         flags.addFlag(add);
-        expect(flags.get('flagGroups').length).to.be(4);
+        expect(flags.get('flagGroups').length).to.be(3);
     })
 
     it('click',function(){

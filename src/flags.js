@@ -83,7 +83,7 @@ Util.augment(Flags,{
     },
     /**
      * 添加单个flag
-     * @param {Object} item marker`的配置信息
+     * @param {Object} item flag的配置信息
      */
     addFlag: function(item){
         var _self = this,

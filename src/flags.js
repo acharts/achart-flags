@@ -9,7 +9,7 @@ var Util = require('achart-util'),
     PlotItem = require('achart-plot').Item;
 
 /**
- * @class Chart.Group.Flags
+ * @class Chart.Flags
  * 图形标记，包含文本和连接线
  *
  *  - <a href="http://spmjs.io/docs/achart-series/latest/api/stacked.html" target="_blank">文档</a>

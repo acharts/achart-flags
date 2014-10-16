@@ -11,7 +11,11 @@ var Util = require('achart-util'),
 /**
  * @class Chart.Group.Flags
  * 图形标记，包含文本和连接线
- * @extends Chart.PlotItem
+ *
+ *  - <a href="http://spmjs.io/docs/achart-series/latest/api/stacked.html" target="_blank">文档</a>
+ *  - <a href="http://spmjs.io/docs/achart-series/latest/wiki/07-stacked.html" target="_blank">wiki</a>
+ * 
+ * @extends Chart.Plot.Item
  */
 var Flags = function(cfg){
     Flags.superclass.constructor.call(this,cfg);
@@ -142,7 +146,7 @@ Util.augment(Flags,{
     /**
      * 修改flag
      * @param {Array} items 新的配置信息
-     * @param {Boolen} animate 进行动画
+     * @param {Boolean} animate 进行动画
      */
     change: function(items,animate){
         var _self = this,

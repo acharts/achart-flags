@@ -12,8 +12,8 @@ var Util = require('achart-util'),
  * @class Chart.Flags
  * 图形标记，包含文本和连接线
  *
- *  - <a href="http://spmjs.io/docs/achart-series/latest/api/stacked.html" target="_blank">文档</a>
- *  - <a href="http://spmjs.io/docs/achart-series/latest/wiki/07-stacked.html" target="_blank">wiki</a>
+ *  - <a href="http://spmjs.io/docs/achart-flags/" target="_blank">文档</a>
+ *  - <a href="http://spmjs.io/docs/achart-flags/wiki/" target="_blank">wiki</a>
  * 
  * @extends Chart.Plot.Item
  */
